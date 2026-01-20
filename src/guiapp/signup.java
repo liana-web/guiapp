@@ -248,6 +248,11 @@ public class signup extends javax.swing.JFrame {
 
                 pstmt.executeUpdate();
                 javax.swing.JOptionPane.showMessageDialog(this, "Table checked and Data saved successfully!");
+                
+                login lf = new login ();
+                lf.setLocationRelativeTo(null);
+                lf.setVisible (true);
+                this.dispose();
             }
 
         } catch (java.sql.SQLException e) {
@@ -290,7 +295,9 @@ public class signup extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new signup().setVisible(true);
+                signup s = new signup();
+                s.setLocationRelativeTo(null);
+                s.setVisible(true);
             }
         });
     }

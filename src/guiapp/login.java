@@ -110,6 +110,7 @@ public class login extends javax.swing.JFrame {
         label_email.setText("Email:");
         jPanel4.add(label_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 50, 20));
 
+        JPasswordField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         JPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JPasswordFieldActionPerformed(evt);
@@ -167,6 +168,7 @@ public class login extends javax.swing.JFrame {
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
     signup jm = new signup ();
+    jm.setLocationRelativeTo(null);
     jm.setVisible (true);
     this.dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
@@ -178,7 +180,9 @@ public class login extends javax.swing.JFrame {
         if (authenticate(email, password)) {
             javax.swing.JOptionPane.showMessageDialog(this, "Login Successful! Welcome.");
             // Code to open your Main Dashboard/Menu goes here
-            new dashboard().setVisible(true);
+            dashboard db = new dashboard();
+            db.setLocationRelativeTo(null);
+            db.setVisible(true);
             this.dispose(); 
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Invalid Email or Password.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -241,7 +245,9 @@ public class login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new login().setVisible(true);
+                login lf = new login();
+                lf.setLocationRelativeTo(null);
+                lf.setVisible(true);
             }
         });
     }

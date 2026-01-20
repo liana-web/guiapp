@@ -88,6 +88,7 @@ public class main extends javax.swing.JFrame {
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
     login lf = new login ();
+    lf.setLocationRelativeTo(null);
     lf.setVisible (true);
     this.dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
@@ -122,7 +123,9 @@ public class main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new main().setVisible(true);
+                main m = new main();
+                m.setLocationRelativeTo(null);
+                m.setVisible(true);
             }
         });
     }
