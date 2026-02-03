@@ -5,6 +5,14 @@
  */
 package guiapp;
 
+
+import Admin.Admindashboard;
+import config.config;
+import Admin.home;
+import Customer.Customerdashboard;
+import Staff.Staffdashboard;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author johnj
@@ -30,16 +38,21 @@ public class login extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        JTextField = new javax.swing.JTextField();
+        em = new javax.swing.JTextField();
         label_email = new javax.swing.JLabel();
-        JPasswordField = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        ps = new javax.swing.JPasswordField();
+        try {
+            jButton1 =(javax.swing.JButton)java.beans.Beans.instantiate(getClass().getClassLoader(), "guiapp.login_jButton1");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -58,74 +71,57 @@ public class login extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 56, 34));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/guiapp/images/main.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 210, 200));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/guiapp/images/logo2.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 200, 270));
 
-        jPanel3.setBackground(new java.awt.Color(0, 102, 102));
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("The Taste That Make You Feel Delicous");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 330, 80));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FOOD ORDERING SYSTEM");
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 590));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
-
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, 560));
-
-        jPanel4.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel4.setBackground(new java.awt.Color(255, 238, 208));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 56, 34));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Login");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 120, 32));
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 200, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Password:");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 90, 20));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 90, 20));
 
-        JTextField.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        JTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel4.add(JTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 180, 40));
+        em.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        em.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel4.add(em, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 210, 40));
 
         label_email.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         label_email.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         label_email.setText("Email:");
-        jPanel4.add(label_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 50, 20));
+        jPanel4.add(label_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 50, 20));
 
-        JPasswordField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        JPasswordField.addActionListener(new java.awt.event.ActionListener() {
+        ps.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        ps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JPasswordFieldActionPerformed(evt);
+                psActionPerformed(evt);
             }
         });
-        jPanel4.add(JPasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 180, 40));
+        jPanel4.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 210, 40));
 
-        jButton1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel4.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 100, 30));
+        jPanel4.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 130, 30));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -135,32 +131,26 @@ public class login extends javax.swing.JFrame {
                 jLabel6MouseClicked(evt);
             }
         });
-        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 520, 70, 20));
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 540, 70, 30));
 
         jLabel7.setText("No Account? Click sign-up");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 160, 30));
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, 160, 30));
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, 350, 560));
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 440, 590));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 680, Short.MAX_VALUE)
+            .addGap(0, 851, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
+            .addGap(0, 590, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -174,18 +164,51 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String email = JTextField.getText();
-        String password = new String(JPasswordField.getPassword());
+        config cn = new config();
 
-        if (authenticate(email, password)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Login Successful! Welcome.");
-            // Code to open your Main Dashboard/Menu goes here
-            dashboard db = new dashboard();
-            db.setLocationRelativeTo(null);
-            db.setVisible(true);
-            this.dispose(); 
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Invalid Email or Password.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        String sql = "SELECT * FROM user WHERE email = ? AND password = ? AND status = ?";
+
+        try {
+            // Fetch the user's type from DB
+            String userType = cn.getUserType(sql, em.getText(), ps.getText(), "Active");
+
+            if(userType != null) {
+                JOptionPane.showMessageDialog(null, "LOGIN SUCCESS!");
+
+                // Use switch-case based on userType
+                switch (userType.toLowerCase()) { // converting to lowercase to avoid case issues
+                    case "admin":
+//                        home homeScreen = new home();
+//                        homeScreen.setVisible(true);
+                        Admindashboard AdmindashboardScreen = new Admindashboard();
+                        AdmindashboardScreen.setVisible(true);
+                        this.dispose();
+                        break;
+
+                    case "customer":
+                        Customerdashboard customerScreen = new Customerdashboard();
+                        customerScreen.setVisible(true);
+                        this.dispose();
+                        break;
+                        
+                    case "staff":
+                        Staffdashboard staffScreen = new Staffdashboard();
+                        staffScreen.setVisible(true);
+                        this.dispose();
+                        break;
+
+                    default:
+                        JOptionPane.showMessageDialog(null, "Unknown user type: " + userType);
+                        break;
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "INVALID CREDENTIALS OR INACTIVE ACCOUNT!");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error during login: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -211,9 +234,9 @@ public class login extends javax.swing.JFrame {
         }
     }
     
-    private void JPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JPasswordFieldActionPerformed
+    private void psActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_JPasswordFieldActionPerformed
+    }//GEN-LAST:event_psActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,8 +276,7 @@ public class login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField JPasswordField;
-    private javax.swing.JTextField JTextField;
+    private javax.swing.JTextField em;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -264,9 +286,9 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel label_email;
+    private javax.swing.JPasswordField ps;
     // End of variables declaration//GEN-END:variables
 }
