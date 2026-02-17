@@ -5,6 +5,17 @@
  */
 package Customer;
 
+import Admin.user;
+import config.Session;
+import config.config;
+import static config.config.connectDB;
+import guiapp.login;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Juliana Ritz Magat
@@ -14,8 +25,23 @@ public class mycart extends javax.swing.JFrame {
     /**
      * Creates new form mycart
      */
+    
+    private int orderId;
+    
     public mycart() {
         initComponents();
+    }
+
+    mycart(int newOrderId) {
+        initComponents();
+        this.orderId = newOrderId;
+        fetchCartData(newOrderId);
+    }
+    
+    private void fetchCartData(int orderID) {
+        config con = new config();
+        String sql = "SELECT c.id AS 'ID', p.product_name AS 'Product Name', p.product_price AS 'Product Price', c.quantity AS 'Quantity', (product_price * quantity) AS 'Subtotal' FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE order_id = " + orderID;
+        con.displayData(sql, cartTable); 
     }
 
     /**
@@ -41,6 +67,10 @@ public class mycart extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        cartTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,26 +111,44 @@ public class mycart extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("MY ORDERS");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("MY CART");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("PROFILE");
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 150, 40));
 
         products.setBackground(new java.awt.Color(0, 153, 153));
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products.setForeground(new java.awt.Color(255, 255, 255));
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("PRODUCTS");
+        products.setText("MENU");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 productsMouseEntered(evt);
             }
@@ -110,7 +158,7 @@ public class mycart extends javax.swing.JFrame {
         });
         jPanel6.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 150, 40));
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
+        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 600));
 
         jPanel7.setBackground(new java.awt.Color(0, 56, 34));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -138,17 +186,65 @@ public class mycart extends javax.swing.JFrame {
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
 
+        jButton2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton2.setText("Process Order");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 550, 130, 30));
+
+        jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(204, 0, 0));
+        jButton1.setText("Remove Item");
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 550, -1, 30));
+
+        cartTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Product Name", "Product Price", "Quantity", "Subtotal"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(cartTable);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 700, 460));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 850, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 591, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -172,6 +268,72 @@ public class mycart extends javax.swing.JFrame {
     private void productsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseExited
         products.setBackground(new java.awt.Color(0,0,0));
     }//GEN-LAST:event_productsMouseExited
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int selectedRow = cartTable.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an item to remove.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to remove this item?", 
+                "Confirm Removal", 
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                String itemId = cartTable.getModel().getValueAt(selectedRow, 0).toString();
+                
+                DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
+                model.removeRow(selectedRow);
+                
+                config con = new config();
+                con.deleteCartItem(itemId);
+
+                JOptionPane.showMessageDialog(this, "Item removed successfully!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        config con = new config();
+        String updateSQL = "UPDATE tbl_orders SET o_status = 'Processed' WHERE o_id = ?";
+        con.updateRecord(updateSQL, this.orderId);
+
+        JOptionPane.showMessageDialog(this, "Order sucessfully processed.");
+        
+        new myorder().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+         mycart mc = new mycart ();
+        mc.setLocationRelativeTo(null);
+        mc.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
+       menu mn = new menu ();
+        mn.setLocationRelativeTo(null);
+        mn.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_productsMouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+       settings pf = new settings();
+        pf.setLocationRelativeTo(null);
+        pf.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel10MouseClicked
 
     /**
      * @param args the command line arguments
@@ -203,12 +365,21 @@ public class mycart extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mycart().setVisible(true);
+                if (Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new mycart().setVisible(true);
+                }                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable cartTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
@@ -221,6 +392,7 @@ public class mycart extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel products;
     private javax.swing.JLabel products1;
     // End of variables declaration//GEN-END:variables

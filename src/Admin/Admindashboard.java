@@ -5,7 +5,10 @@
  */
 package Admin;
 
+import config.Session;
+import guiapp.login;
 import guiapp.signup;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -63,6 +66,11 @@ public class Admindashboard extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("USERS");
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 150, 40));
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -74,7 +82,12 @@ public class Admindashboard extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("MENU");
+        jLabel11.setText("PRODUCTS");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 40));
 
         jLabel15.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -152,6 +165,7 @@ public class Admindashboard extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
@@ -160,6 +174,19 @@ public class Admindashboard extends javax.swing.JFrame {
         pf.setVisible (true);
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        user u = new user();
+        u.setLocationRelativeTo(null);
+        u.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel14MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        products p = new products();
+        p.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
 
     /**
      * @param args the command line arguments
@@ -191,7 +218,13 @@ public class Admindashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admindashboard().setVisible(true);
+                if (config.Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new Admindashboard().setVisible(true);
+                }
             }
         });
     }

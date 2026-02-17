@@ -5,6 +5,9 @@
  */
 package Staff;
 
+import guiapp.login;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Juliana Ritz Magat
@@ -138,6 +141,7 @@ public class Staffdashboard extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void productsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseEntered
@@ -179,7 +183,13 @@ public class Staffdashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Staffdashboard().setVisible(true);
+                if (config.Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new Staffdashboard().setVisible(true);
+                }
             }
         });
     }

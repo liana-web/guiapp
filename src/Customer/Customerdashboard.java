@@ -5,7 +5,9 @@
  */
 package Customer;
 
-import Customer.settings;
+import Admin.addproducts;
+import guiapp.login;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -68,6 +70,11 @@ public class Customerdashboard extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("LOG OUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         products1.setBackground(new java.awt.Color(0, 153, 153));
@@ -89,12 +96,22 @@ public class Customerdashboard extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("MY ORDERS");
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("MY CART");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -112,8 +129,11 @@ public class Customerdashboard extends javax.swing.JFrame {
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products.setForeground(new java.awt.Color(255, 255, 255));
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("MENU");
+        products.setText("PRODUCTS");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 productsMouseEntered(evt);
             }
@@ -146,7 +166,7 @@ public class Customerdashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CUSTOMER DASHBOARD");
+        jLabel1.setText("ADMIN DASHBOARD");
         jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 480, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
@@ -167,6 +187,7 @@ public class Customerdashboard extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void productsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseEntered
@@ -192,6 +213,34 @@ public class Customerdashboard extends javax.swing.JFrame {
         pf.setVisible (true);
         this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
+        addproducts ap = new addproducts ();
+        ap.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_productsMouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        mycart mc = new mycart ();
+        mc.setLocationRelativeTo(null);
+        mc.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        myorder mo = new myorder ();
+        mo.setLocationRelativeTo(null);
+        mo.setVisible (true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        config.Session.logout(); 
+        javax.swing.JOptionPane.showMessageDialog(this, "Logged out successfully.");
+        login lf = new login();
+        lf.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -223,7 +272,13 @@ public class Customerdashboard extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Customerdashboard().setVisible(true);
+                if (config.Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new Customerdashboard().setVisible(true);
+                }
             }
         });
     }

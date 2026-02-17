@@ -5,6 +5,11 @@
  */
 package Customer;
 
+import config.Session;
+import config.config;
+import guiapp.login;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Juliana Ritz Magat
@@ -16,6 +21,14 @@ public class myorder extends javax.swing.JFrame {
      */
     public myorder() {
         initComponents();
+        displayOrders();
+    }
+    
+    void displayOrders() {
+        config con = new config();
+//        String sql = "SELECT c.id AS 'ID', p.product_name AS 'Product Name', p.product_price AS 'Product Price', c.quantity AS 'Quantity', (product_price * quantity) AS 'Subtotal' FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE order_id = " + orderID;
+        String sql = "SELECT o_id AS 'Order ID', o_date AS 'Order Date', o_status AS 'Order Status', (SELECT SUM(product_price * quantity) FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE o.o_id = c.order_id) AS 'Amount' FROM tbl_orders o WHERE u_id = " + Session.getUserId();
+        con.displayData(sql,ordersTable);      
     }
 
     /**
@@ -41,6 +54,8 @@ public class myorder extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ordersTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +75,11 @@ public class myorder extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("LOG OUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         products1.setBackground(new java.awt.Color(0, 153, 153));
@@ -99,7 +119,7 @@ public class myorder extends javax.swing.JFrame {
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products.setForeground(new java.awt.Color(255, 255, 255));
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("PRODUCTS");
+        products.setText("MENU");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 productsMouseEntered(evt);
@@ -138,6 +158,21 @@ public class myorder extends javax.swing.JFrame {
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
 
+        ordersTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Order ID", "Date", "Status", "Total Amount"
+            }
+        ));
+        jScrollPane1.setViewportView(ordersTable);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 680, 390));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,6 +208,14 @@ public class myorder extends javax.swing.JFrame {
         products.setBackground(new java.awt.Color(0,0,0));
     }//GEN-LAST:event_productsMouseExited
 
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        Session.logout(); 
+        javax.swing.JOptionPane.showMessageDialog(this, "Logged out successfully.");
+        login lf = new login();
+        lf.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -203,7 +246,13 @@ public class myorder extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new myorder().setVisible(true);
+                if (Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new myorder().setVisible(true);
+                }
             }
         });
     }
@@ -221,6 +270,8 @@ public class myorder extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable ordersTable;
     private javax.swing.JLabel products;
     private javax.swing.JLabel products1;
     // End of variables declaration//GEN-END:variables

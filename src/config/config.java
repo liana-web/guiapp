@@ -30,20 +30,108 @@ public class config {
         return con;
     }
     
-    public void addRecord(String sql, Object... values) {
-    try (Connection conn = connectDB();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    public int addOrderRecord(String sql, Object... values) {
+        int generatedId = -1;
 
-        for (int i = 0; i < values.length; i++) {
-            pstmt.setObject(i + 1, values[i]);
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1); // This is your New ID
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        pstmt.executeUpdate();
-        System.out.println("Record added successfully!");
-    } catch (SQLException e) {
-        System.out.println("Error adding record: " + e.getMessage());
+        return generatedId;
     }
-}
+    
+    public void addRecord(String sql, Object... values) {
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            pstmt.executeUpdate();
+            System.out.println("Record added successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error adding record: " + e.getMessage());
+        }
+    }
+    
+    public void updateRecord(String sql, Object... values) {
+        try (Connection conn = connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            pstmt.executeUpdate();
+            pstmt.close();
+            conn.close();
+    
+            System.out.println("Record updated successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error adding record: " + e.getMessage());
+        }
+    }
+    
+    public void deleteRecord(String userId) {
+        String sql = "DELETE FROM user WHERE id = ?";
+        Object[] values = { userId };
+
+        try (Connection conn = connectDB();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            int rowsDeleted = pstmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Record deleted successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting record: " + e.getMessage());
+        }
+    }
+    
+    public void deleteCartItem(String itemId) {
+        String sql = "DELETE FROM tbl_cart WHERE id = ?";
+        Object[] values = { itemId };
+
+        try (Connection conn = connectDB();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            int rowsDeleted = pstmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Record deleted successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting record: " + e.getMessage());
+        }
+    }
+    
 //    public boolean authenticate(String sql, Object... values) {
 //    try (Connection conn = connectDB();
 //         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -94,22 +182,22 @@ public class config {
     }
 
     public void displayData(String sql, javax.swing.JTable table) {
-    try (Connection conn = connectDB();
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery()) {
-        
-        // This line automatically maps the Resultset to your JTable
-        table.setModel(DbUtils.resultSetToTableModel(rs));
-        
-    } catch (SQLException e) {
-        System.out.println("Error displaying data: " + e.getMessage());
+        try (Connection conn = connectDB();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            // This line automatically maps the Resultset to your JTable
+            table.setModel(DbUtils.resultSetToTableModel(rs));
+
+        } catch (SQLException e) {
+            System.out.println("Error displaying data: " + e.getMessage());
+        }
     }
-}
     
     public String getUserType(String sql, String email, String password, String status) {
         String userType = null;
         try (Connection conn = connectDB();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+            PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, email);
             pst.setString(2, password);
             pst.setString(3, status);
