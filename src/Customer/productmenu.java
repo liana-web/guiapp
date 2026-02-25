@@ -3,22 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Admin;
+package Customer;
 
+import config.Session;
 import config.config;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Juliana Ritz Magat
  */
-public class addproducts extends javax.swing.JFrame {
+public class productmenu extends javax.swing.JFrame {
+
+    private int orderIdToUse;
 
     /**
-     * Creates new form addproducts
+     * Creates new form productmenu
      */
-    public addproducts() {
+    public productmenu() {
         initComponents();
+        displayProducts();
+        
+        if (this.orderIdToUse <= 0) {
+            btn_view_cart.setVisible(false);
+        } else {
+            btn_view_cart.setVisible(true);
+        }
+    }
+    
+    void displayProducts() {
+        config con = new config();
+        String sql = "SELECT * FROM products WHERE product_status = 'Active'";
+        con.displayData(sql,productTable);      
     }
 
     /**
@@ -41,13 +58,10 @@ public class addproducts extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        product_name = new javax.swing.JTextField();
-        product_price = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        product_status = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productTable = new javax.swing.JTable();
+        btn_view_cart = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,7 +86,7 @@ public class addproducts extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("PRODUCTS");
+        jLabel4.setText("MENU");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 40));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -107,39 +121,53 @@ public class addproducts extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ADD PRODUCTS");
+        jLabel1.setText("PRODUCT MENU");
         jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 360, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
 
-        jLabel9.setText("Product Name");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 90, 30));
+        productTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(productTable);
 
-        jLabel10.setText("Status");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 50, 20));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 680, 400));
 
-        jLabel11.setText("Price");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, 50, 20));
-
-        product_name.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                product_nameActionPerformed(evt);
+        btn_view_cart.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btn_view_cart.setText("View Cart");
+        btn_view_cart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_view_cartMouseClicked(evt);
             }
         });
-        jPanel2.add(product_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 230, 50));
-        jPanel2.add(product_price, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 230, 50));
-
-        jButton1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jButton1.setText("SAVE PRODUCT");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_view_cart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_view_cartActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 460, 180, 70));
+        jPanel2.add(btn_view_cart, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 140, 130, 30));
 
-        product_status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
-        jPanel2.add(product_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 230, 50));
+        jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton3.setText("Add to Cart");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 140, 130, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,31 +185,65 @@ public class addproducts extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void product_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_nameActionPerformed
+    private void btn_view_cartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_view_cartMouseClicked
+        new mycart(this.orderIdToUse).setVisible(true);
+    }//GEN-LAST:event_btn_view_cartMouseClicked
+
+    private void btn_view_cartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_view_cartActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_product_nameActionPerformed
+    }//GEN-LAST:event_btn_view_cartActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String p_name = product_name.getText();
-        String p_price = product_price.getText();
-        String p_status = product_status.getSelectedItem().toString();
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        int selectedRow = productTable.getSelectedRow();
 
-        if(p_name.isEmpty() || p_price.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please fill all required fields");
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a product to add.");
             return;
         }
 
-        config con = new config();          
-        String insertSQL = "INSERT INTO products (product_name, product_price, product_status) VALUES (?, ?, ?)";
-        con.addRecord(insertSQL, p_name, p_price, p_status);
+        String productId = productTable.getModel().getValueAt(selectedRow, 0).toString();
+        String qty = JOptionPane.showInputDialog("How many would you like to buy?");
 
-        JOptionPane.showMessageDialog(this, "New Product sucessfully added.");
-        
-        new products().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if (qty != null && !qty.trim().isEmpty()) {
+            config con = new config();
+            int userId = Session.getUserId();
+
+            // 1. Check if a 'Pending' order already exists for this user
+            // This requires a new method in your config class
+            int existingOrderId = con.getSingleValue("SELECT o_id FROM tbl_orders WHERE u_id = ? AND o_status = 'Pending'", userId);
+
+            int orderIdToUse;
+
+            if (existingOrderId != -1) {
+                // Use the existing order
+                orderIdToUse = existingOrderId;
+            } else {
+                // 2. No pending order found, create a NEW one
+                LocalDateTime now = LocalDateTime.now();
+                String insertOrderSQL = "INSERT INTO tbl_orders (o_date, o_status, u_id) VALUES (?, ?, ?)";
+                orderIdToUse = con.addOrderRecord(insertOrderSQL, now, "Pending", userId);
+            }
+            
+            this.orderIdToUse = orderIdToUse;
+            btn_view_cart.setVisible(true);
+
+            // 3. Add to cart using either the found ID or the newly created ID
+            if (orderIdToUse != -1) {
+                String insertCartSQL = "INSERT INTO tbl_cart (product_id, quantity, order_id) VALUES (?, ?, ?)";
+                con.addRecord(insertCartSQL, productId, qty, orderIdToUse);
+                JOptionPane.showMessageDialog(null, "Product added to your Cart");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error processing order.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,29 +262,28 @@ public class addproducts extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new addproducts().setVisible(true);
+                new productmenu().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_view_cart;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -230,12 +291,10 @@ public class addproducts extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField product_name;
-    private javax.swing.JTextField product_price;
-    private javax.swing.JComboBox<String> product_status;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable productTable;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,19 +6,54 @@
 package Admin;
 
 import config.config;
+import static config.config.connectDB;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Juliana Ritz Magat
  */
-public class addproducts extends javax.swing.JFrame {
+public class updateproduct extends javax.swing.JFrame {
+
+    private String updateId;
 
     /**
-     * Creates new form addproducts
+     * Creates new form updateproduct
      */
-    public addproducts() {
+    public updateproduct() {
         initComponents();
+    }
+    
+    updateproduct(String productId) {
+        initComponents();
+        this.updateId = productId;
+        
+        fetchProductData(productId);
+    }
+    
+    private void fetchProductData(String id) {
+        try {
+            Connection conn = connectDB();
+            String sql = "SELECT * FROM products WHERE id = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                product_name.setText(rs.getString("product_name"));
+                product_price.setText(rs.getString("product_price"));
+                product_status.setSelectedItem(rs.getString("product_status"));
+                
+                rs.close();
+                pst.close();
+                conn.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -48,6 +83,7 @@ public class addproducts extends javax.swing.JFrame {
         product_price = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         product_status = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,8 +143,8 @@ public class addproducts extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ADD PRODUCTS");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 360, 50));
+        jLabel1.setText("UPDATE PRODUCTS");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 370, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
 
@@ -130,16 +166,25 @@ public class addproducts extends javax.swing.JFrame {
         jPanel2.add(product_price, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 230, 50));
 
         jButton1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jButton1.setText("SAVE PRODUCT");
+        jButton1.setText("UPDATE PRODUCT");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 460, 180, 70));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 210, 70));
 
         product_status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
         jPanel2.add(product_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 230, 50));
+
+        jButton2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jButton2.setText("CANCEL");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 470, 210, 70));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,15 +218,21 @@ public class addproducts extends javax.swing.JFrame {
             return;
         }
 
-        config con = new config();          
-        String insertSQL = "INSERT INTO products (product_name, product_price, product_status) VALUES (?, ?, ?)";
-        con.addRecord(insertSQL, p_name, p_price, p_status);
-
-        JOptionPane.showMessageDialog(this, "New Product sucessfully added.");
+        config con = new config();
         
+        String updateSQL = "UPDATE products SET product_name = ?, product_price = ?, product_status = ? WHERE id = ?";
+        con.updateRecord(updateSQL, p_name, p_price, p_status, this.updateId);
+
+        JOptionPane.showMessageDialog(this, "Product sucessfully updated.");
+
         new products().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new products().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,26 +251,27 @@ public class addproducts extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(updateproduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(updateproduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(updateproduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addproducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(updateproduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new addproducts().setVisible(true);
+                new updateproduct().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

@@ -361,7 +361,7 @@ DefaultTableModel cartModel;
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void products2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products2MouseClicked
-       settings pf = new settings();
+        settings pf = new settings();
         pf.setLocationRelativeTo(null);
         pf.setVisible (true);
         this.dispose();

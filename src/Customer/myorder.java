@@ -189,6 +189,7 @@ public class myorder extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void products1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseEntered

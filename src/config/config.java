@@ -110,6 +110,28 @@ public class config {
         }
     }
     
+    public void deleteProductRecord(String productId) {
+        String sql = "DELETE FROM products WHERE id = ?";
+        Object[] values = { productId };
+
+        try (Connection conn = connectDB();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            int rowsDeleted = pstmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Record deleted successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting record: " + e.getMessage());
+        }
+    }
+    
     public void deleteCartItem(String itemId) {
         String sql = "DELETE FROM tbl_cart WHERE id = ?";
         Object[] values = { itemId };
@@ -249,5 +271,23 @@ public java.util.List<java.util.Map<String, Object>> fetchRecords(String sqlQuer
 
     return records;
 }
+
+    public int getSingleValue(String sql, int userId) {
+        int id = -1;
+        try (Connection conn = this.connectDB(); // Ensure this matches your connection method name
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt(1); // Get the first column (o_id)
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+        }
+        return id; // Returns the ID if found, otherwise returns -1
+    }
 
 }
