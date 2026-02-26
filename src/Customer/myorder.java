@@ -8,7 +8,10 @@ package Customer;
 import config.Session;
 import config.config;
 import guiapp.login;
+import java.awt.Color;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -22,11 +25,51 @@ public class myorder extends javax.swing.JFrame {
     public myorder() {
         initComponents();
         displayOrders();
+        
+        sidebarmenu_myorders.setOpaque(true);
+        sidebarmenu_myorders.setBackground(new Color(220, 220, 220));
+        sidebarmenu_myorders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        sidebarmenu_myorders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myorders.setOpaque(true);
+                sidebarmenu_myorders.setBackground(new Color(240, 240, 240)); // Light Gray hover
+                sidebarmenu_myorders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // Pointer finger
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myorders.setOpaque(false); 
+                sidebarmenu_myorders.setBackground(null);
+            }
+
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                highlightMenu(sidebarmenu_myorders);
+            }
+        });
+    }
+    
+    public void highlightMenu(JLabel selectedLabel) {
+        JLabel[] menus = {products1, products, sidebarmenu_myorders, jLabel10};
+
+        for (JLabel lbl : menus) {
+            if (lbl != null) {
+                lbl.setOpaque(false);
+                lbl.setBackground(null);
+                lbl.setForeground(Color.WHITE);
+                lbl.setBorder(null);
+            }
+        }
+
+        if (selectedLabel != null) {
+            selectedLabel.setOpaque(true);
+            selectedLabel.setBackground(new Color(52, 152, 219));
+            selectedLabel.setForeground(Color.WHITE);
+            selectedLabel.setBorder(new MatteBorder(0, 5, 0, 0, Color.DARK_GRAY));
+        }
     }
     
     void displayOrders() {
         config con = new config();
-//        String sql = "SELECT c.id AS 'ID', p.product_name AS 'Product Name', p.product_price AS 'Product Price', c.quantity AS 'Quantity', (product_price * quantity) AS 'Subtotal' FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE order_id = " + orderID;
         String sql = "SELECT o_id AS 'Order ID', o_date AS 'Order Date', o_status AS 'Order Status', (SELECT SUM(product_price * quantity) FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE o.o_id = c.order_id) AS 'Amount' FROM tbl_orders o WHERE u_id = " + Session.getUserId();
         con.displayData(sql,ordersTable);      
     }
@@ -46,8 +89,7 @@ public class myorder extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        sidebarmenu_myorders = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         products = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -86,8 +128,11 @@ public class myorder extends javax.swing.JFrame {
         products1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products1.setForeground(new java.awt.Color(255, 255, 255));
         products1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products1.setText("DASHBOARD");
+        products1.setText("HOME");
         products1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                products1MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 products1MouseEntered(evt);
             }
@@ -97,23 +142,27 @@ public class myorder extends javax.swing.JFrame {
         });
         jPanel6.add(products1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 150, 40));
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("MY ORDERS");
-        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
-
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("MY CART");
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
+        sidebarmenu_myorders.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        sidebarmenu_myorders.setForeground(new java.awt.Color(255, 255, 255));
+        sidebarmenu_myorders.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sidebarmenu_myorders.setText("MY ORDERS");
+        sidebarmenu_myorders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myordersMouseClicked(evt);
+            }
+        });
+        jPanel6.add(sidebarmenu_myorders, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("PROFILE");
-        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 150, 40));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
+        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
 
         products.setBackground(new java.awt.Color(0, 153, 153));
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -121,6 +170,9 @@ public class myorder extends javax.swing.JFrame {
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         products.setText("MENU");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 productsMouseEntered(evt);
             }
@@ -153,7 +205,7 @@ public class myorder extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CUSTOMER DASHBOARD");
+        jLabel1.setText("MY ORDERS");
         jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 480, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
@@ -201,12 +253,12 @@ public class myorder extends javax.swing.JFrame {
     }//GEN-LAST:event_products1MouseExited
 
     private void productsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseEntered
-        products.setBackground(new java.awt.Color(100,100,100));
-        products.setOpaque(true);       // TODO add your handling code here:
+//        products.setBackground(new java.awt.Color(100,100,100));
+//        products.setOpaque(true);       // TODO add your handling code here:
     }//GEN-LAST:event_productsMouseEntered
 
     private void productsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseExited
-        products.setBackground(new java.awt.Color(0,0,0));
+//        products.setBackground(new java.awt.Color(0,0,0));
     }//GEN-LAST:event_productsMouseExited
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -216,6 +268,26 @@ public class myorder extends javax.swing.JFrame {
         lf.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void sidebarmenu_myordersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sidebarmenu_myordersMouseClicked
+        new myorder().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_sidebarmenu_myordersMouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        new settings().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
+        new productmenu().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_productsMouseClicked
+
+    private void products1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseClicked
+        new Customerdashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_products1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -263,8 +335,6 @@ public class myorder extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -275,5 +345,6 @@ public class myorder extends javax.swing.JFrame {
     private javax.swing.JTable ordersTable;
     private javax.swing.JLabel products;
     private javax.swing.JLabel products1;
+    private javax.swing.JLabel sidebarmenu_myorders;
     // End of variables declaration//GEN-END:variables
 }

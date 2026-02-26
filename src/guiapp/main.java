@@ -5,6 +5,9 @@
  */
 package guiapp;
 
+import Customer.Customerdashboard;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author johnj
@@ -15,6 +18,15 @@ public class main extends javax.swing.JFrame {
      * Creates new form main
      */
     public main() {
+//        if (config.Session.getUserId() == 0) {
+//            JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+//            login lf = new login();
+//            lf.setVisible(true);
+//            this.dispose();
+//        } else {
+//            new Customerdashboard().setVisible(true);
+//            this.dispose();
+//        }
         initComponents();
     }
 
@@ -97,6 +109,7 @@ public class main extends javax.swing.JFrame {
                 main m = new main();
                 m.setLocationRelativeTo(null);
                 m.setVisible(true);
+              
             }
         });
     }

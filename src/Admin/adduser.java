@@ -5,23 +5,18 @@
  */
 package Admin;
 
+import config.Session;
 import config.config;
 import static config.config.connectDB;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
+import guiapp.login;
 import java.awt.Image;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -321,7 +316,13 @@ public class adduser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new adduser().setVisible(true);
+                if (Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new adduser().setVisible(true);
+                }
             }
         });
     }

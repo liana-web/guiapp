@@ -116,6 +116,11 @@ public class login extends javax.swing.JFrame {
         });
         jPanel4.add(ps, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 210, 40));
 
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -169,48 +174,38 @@ public class login extends javax.swing.JFrame {
 
         String sql = "SELECT * FROM user WHERE email = ? AND password = ? AND status = ?";
 
-        try {
-            // Fetch the user's type from DB
-            String userType = cn.getUserType(sql, em.getText(), ps.getText(), "Active");
+       
+        String userType = cn.getUserType(sql, em.getText(), ps.getText(), "Active");
 
-            if(userType != null) {
-                JOptionPane.showMessageDialog(null, "LOGIN SUCCESS!");
 
-                // Use switch-case based on userType
-                switch (userType.toLowerCase()) { // converting to lowercase to avoid case issues
-                    case "admin":
-//                        home homeScreen = new home();
-//                        homeScreen.setVisible(true);
-                        Admindashboard AdmindashboardScreen = new Admindashboard();
-                        AdmindashboardScreen.setVisible(true);
-                        this.dispose();
-                        break;
+        System.out.println("Login Attempt Email: " + em.getText());
+        System.out.println("User Type from Database: [" + userType + "]"); 
 
-                    case "customer":
-                        Customerdashboard customerScreen = new Customerdashboard();
-                        customerScreen.setVisible(true);
-                        this.dispose();
-                        break;
-                        
-                    case "staff":
-                        Staffdashboard staffScreen = new Staffdashboard();
-                        staffScreen.setVisible(true);
-                        this.dispose();
-                        break;
+        if(userType != null) {
+            switch (userType.trim().toLowerCase()) { 
+                case "admin":                      
+                    new Admindashboard().setVisible(true);
+                    this.dispose();
+                    break;
 
-                    default:
-                        JOptionPane.showMessageDialog(null, "Unknown user type: " + userType);
-                        break;
-                }
+                case "customer":
+                    new Customerdashboard().setVisible(true);
+                    this.dispose();
+                    break;
 
-            } else {
-                JOptionPane.showMessageDialog(null, "INVALID CREDENTIALS OR INACTIVE ACCOUNT!");
+                case "staff":
+                    new Staffdashboard().setVisible(true);
+                    this.dispose();
+                    break;
+
+                default:
+                    JOptionPane.showMessageDialog(null, "Role not recognized: " + userType);
+                    break;
             }
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error during login: " + ex.getMessage());
-            ex.printStackTrace();
+        } else {
+            JOptionPane.showMessageDialog(null, "INVALID CREDENTIALS!");
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private boolean authenticate(String email, String password) {
@@ -238,6 +233,10 @@ public class login extends javax.swing.JFrame {
     private void psActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_psActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_psActionPerformed
+       
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments

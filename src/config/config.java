@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import net.proteanit.sql.DbUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -110,6 +112,28 @@ public class config {
         }
     }
     
+    public void deleteCartProductRecord(String productId, int orderId) {
+        String sql = "DELETE FROM tbl_cart WHERE product_id = ? AND order_id = ?";
+        Object[] values = { productId, orderId };
+
+        try (Connection conn = connectDB();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setObject(i + 1, values[i]);
+            }
+
+            int rowsDeleted = pstmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Record deleted successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error deleting record: " + e.getMessage());
+        }
+    }
+    
     public void deleteProductRecord(String productId) {
         String sql = "DELETE FROM products WHERE id = ?";
         Object[] values = { productId };
@@ -153,25 +177,6 @@ public class config {
             System.out.println("Error deleting record: " + e.getMessage());
         }
     }
-    
-//    public boolean authenticate(String sql, Object... values) {
-//    try (Connection conn = connectDB();
-//         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//
-//        for (int i = 0; i < values.length; i++) {
-//            pstmt.setObject(i + 1, values[i]);
-//        }
-//
-//        try (ResultSet rs = pstmt.executeQuery()) {
-//            if (rs.next()) {
-//                return true;
-//            }
-//        }
-//    } catch (SQLException e) {
-//        System.out.println("Login Error: " + e.getMessage());
-//    }
-//    return false;
-//}
     
     public boolean authenticate(String sql, Object... values) {
         try (Connection conn = connectDB();
@@ -288,6 +293,74 @@ public java.util.List<java.util.Map<String, Object>> fetchRecords(String sqlQuer
             System.out.println("Database Error: " + e.getMessage());
         }
         return id; // Returns the ID if found, otherwise returns -1
+    }
+    
+    public int checkProductCart(String sql, String productId, int orderId) {
+        System.out.println("Database Error: " + productId + " -- " + orderId);
+        int id = -1;
+        try (Connection conn = this.connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, productId);
+            pstmt.setInt(2, orderId);
+            
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Database Error: " + e.getMessage());
+        }
+        return id; // Returns the ID if found, otherwise returns -1
+    }
+    
+    public double getCartTotalAmount(int orderId) {
+        double total = 0.0;
+        
+        String sql = "SELECT SUM(c.quantity * p.product_price) AS total_sum " +
+                     "FROM tbl_cart c " +
+                     "JOIN products p ON c.product_id = p.id " +
+                     "WHERE c.order_id = ?";
+
+        try (Connection conn = this.connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, orderId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getDouble("total_sum");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error calculating total: " + e.getMessage());
+        }
+        return total;
+    }
+    
+    public Map<String, String> getProfileData(int userId) {
+        Map<String, String> data = new HashMap<>();
+        String sql = "SELECT firstname, lastname, email FROM user WHERE id = ?";
+
+        try (Connection conn = this.connectDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    data.put("firstname", rs.getString("firstname"));
+                    data.put("lastname", rs.getString("lastname"));
+                    data.put("email", rs.getString("email"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching profile: " + e.getMessage());
+        }
+        return data;
     }
 
 }

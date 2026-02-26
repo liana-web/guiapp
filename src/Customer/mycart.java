@@ -60,7 +60,6 @@ public class mycart extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         products = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -116,18 +115,7 @@ public class mycart extends javax.swing.JFrame {
                 jLabel8MouseClicked(evt);
             }
         });
-        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
-
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("MY CART");
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
+        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -138,7 +126,7 @@ public class mycart extends javax.swing.JFrame {
                 jLabel10MouseClicked(evt);
             }
         });
-        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 150, 40));
+        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
 
         products.setBackground(new java.awt.Color(0, 153, 153));
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -193,7 +181,7 @@ public class mycart extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 550, 130, 30));
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 530, 130, 30));
 
         jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(204, 0, 0));
@@ -204,7 +192,7 @@ public class mycart extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 550, -1, 30));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 530, -1, 30));
 
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -230,7 +218,7 @@ public class mycart extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(cartTable);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 700, 460));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 680, 440));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -310,18 +298,8 @@ public class mycart extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-         mycart mc = new mycart ();
-        mc.setLocationRelativeTo(null);
-        mc.setVisible (true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel9MouseClicked
-
     private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
-       menu mn = new menu ();
-        mn.setLocationRelativeTo(null);
-        mn.setVisible (true);
-        this.dispose();
+     
     }//GEN-LAST:event_productsMouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
@@ -365,13 +343,13 @@ public class mycart extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                if (Session.getUserId() == 0) {
-                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
-                    login lf = new login();
-                    lf.setVisible(true);
-                } else {
+//                if (Session.getUserId() == 0) {
+//                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+//                    login lf = new login();
+//                    lf.setVisible(true);
+//                } else {
                     new mycart().setVisible(true);
-                }                
+//                }                
             }
         });
     }
@@ -385,7 +363,6 @@ public class mycart extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

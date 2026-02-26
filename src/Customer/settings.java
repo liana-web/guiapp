@@ -5,7 +5,16 @@
  */
 package Customer;
 
+import Admin.Admindashboard;
+import Admin.user;
 import config.Session;
+import config.config;
+import guiapp.login;
+import java.awt.Color;
+import java.util.Map;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -18,6 +27,7 @@ public class settings extends javax.swing.JFrame {
      */
     public settings() {
         initComponents();
+        displayProfile();
         
         int uid = Session.getUserId();
         String s_firstname = Session.getUserFirstname();
@@ -25,18 +35,70 @@ public class settings extends javax.swing.JFrame {
         String s_email = Session.getEmail();
         String s_type = Session.getUserType();
         
-        firstname.setText(s_firstname);
-        lastname.setText(s_lastname);
-        email.setText(s_email);
-        type.setText(s_type);
-        status.setText("Active");
+//        firstname.setText(s_firstname);
+//        lastname.setText(s_lastname);
+//        user_email.setText(s_email);
         
         // Make text fields read-only
-        firstname.setEditable(false);
-        lastname.setEditable(false);
-        email.setEditable(false);
-        type.setEditable(false);
-        status.setEditable(false);
+//        firstname.setEditable(false);
+//        lastname.setEditable(false);
+//        user_email.setEditable(false);
+        
+        sidebarmenu_profile.setOpaque(true);
+        sidebarmenu_profile.setBackground(new Color(220, 220, 220));
+        sidebarmenu_profile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        sidebarmenu_profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                sidebarmenu_profile.setOpaque(true);
+                sidebarmenu_profile.setBackground(new Color(240, 240, 240));
+                sidebarmenu_profile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                sidebarmenu_profile.setOpaque(false); 
+                sidebarmenu_profile.setBackground(null);
+            }
+
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                highlightMenu(sidebarmenu_profile);
+            }
+        });
+    }
+    
+    public void highlightMenu(JLabel selectedLabel) {
+        JLabel[] menus = {products1, products, sidebarmenu_profile};
+
+        for (JLabel lbl : menus) {
+            if (lbl != null) { 
+                lbl.setOpaque(false);
+                lbl.setBackground(null);
+                lbl.setForeground(Color.WHITE); 
+                lbl.setBorder(null);
+            }
+        }
+
+        if (selectedLabel != null) {
+            selectedLabel.setOpaque(true);
+            selectedLabel.setBackground(new Color(52, 152, 219)); 
+            selectedLabel.setForeground(Color.WHITE);
+            selectedLabel.setBorder(new MatteBorder(0, 5, 0, 0, Color.DARK_GRAY));
+        }
+    }
+    
+    public void displayProfile() {
+        config con = new config();
+        int userId = Session.getUserId();
+
+        Map<String, String> userDetails = con.getProfileData(userId);
+
+        if (!userDetails.isEmpty()) {
+            firstname.setText(userDetails.get("firstname"));
+            lastname.setText(userDetails.get("lastname"));
+            user_email.setText(userDetails.get("email"));
+        } else {
+            JOptionPane.showMessageDialog(this, "User profile not found.");
+        }
     }
 
     /**
@@ -55,8 +117,7 @@ public class settings extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        sidebarmenu_profile = new javax.swing.JLabel();
         products = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -65,13 +126,10 @@ public class settings extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        status = new javax.swing.JTextField();
         firstname = new javax.swing.JTextField();
         lastname = new javax.swing.JTextField();
-        email = new javax.swing.JTextField();
-        type = new javax.swing.JTextField();
+        user_email = new javax.swing.JTextField();
+        btn_update = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,6 +149,11 @@ public class settings extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("LOG OUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         products1.setBackground(new java.awt.Color(0, 153, 153));
@@ -99,6 +162,9 @@ public class settings extends javax.swing.JFrame {
         products1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         products1.setText("DASHBOARD");
         products1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                products1MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 products1MouseEntered(evt);
             }
@@ -112,31 +178,33 @@ public class settings extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("MY ORDERS");
-        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
-
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("MY CART");
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
-
-        jLabel10.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("PROFILE");
-        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel10MouseClicked(evt);
+                jLabel8MouseClicked(evt);
             }
         });
-        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 150, 40));
+        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
+
+        sidebarmenu_profile.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        sidebarmenu_profile.setForeground(new java.awt.Color(255, 255, 255));
+        sidebarmenu_profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sidebarmenu_profile.setText("PROFILE");
+        sidebarmenu_profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sidebarmenu_profileMouseClicked(evt);
+            }
+        });
+        jPanel6.add(sidebarmenu_profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
 
         products.setBackground(new java.awt.Color(0, 153, 153));
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products.setForeground(new java.awt.Color(255, 255, 255));
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("PRODUCTS");
+        products.setText("MENU");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 productsMouseEntered(evt);
             }
@@ -169,7 +237,7 @@ public class settings extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CUSTOMER DASHBOARD");
+        jLabel1.setText("PROFILE");
         jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 480, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
@@ -177,36 +245,17 @@ public class settings extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Name:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, 60, 50));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 60, 50));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Last Name:");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 90, 50));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 260, 90, 50));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Email:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 300, 60, 50));
-
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Type:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 360, 50, 50));
-
-        jLabel12.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Status:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 420, 70, 50));
-
-        status.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        status.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        status.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                statusActionPerformed(evt);
-            }
-        });
-        jPanel2.add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 430, 320, 40));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, 60, 50));
 
         firstname.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         firstname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -215,7 +264,7 @@ public class settings extends javax.swing.JFrame {
                 firstnameActionPerformed(evt);
             }
         });
-        jPanel2.add(firstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 320, 40));
+        jPanel2.add(firstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 210, 320, 40));
 
         lastname.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lastname.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -224,25 +273,25 @@ public class settings extends javax.swing.JFrame {
                 lastnameActionPerformed(evt);
             }
         });
-        jPanel2.add(lastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, 320, 40));
+        jPanel2.add(lastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 270, 320, 40));
 
-        email.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        email.addActionListener(new java.awt.event.ActionListener() {
+        user_email.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        user_email.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        user_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailActionPerformed(evt);
+                user_emailActionPerformed(evt);
             }
         });
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 310, 320, 40));
+        jPanel2.add(user_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 320, 40));
 
-        type.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        type.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        type.addActionListener(new java.awt.event.ActionListener() {
+        btn_update.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_update.setText("UPDATE");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeActionPerformed(evt);
+                btn_updateActionPerformed(evt);
             }
         });
-        jPanel2.add(type, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, 320, 40));
+        jPanel2.add(btn_update, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 460, 270, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -252,10 +301,11 @@ public class settings extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void products1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseEntered
@@ -267,17 +317,12 @@ public class settings extends javax.swing.JFrame {
     }//GEN-LAST:event_products1MouseExited
 
     private void productsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseEntered
-        products.setBackground(new java.awt.Color(100,100,100));
-        products.setOpaque(true);       // TODO add your handling code here:
+              // TODO add your handling code here:
     }//GEN-LAST:event_productsMouseEntered
 
     private void productsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseExited
-        products.setBackground(new java.awt.Color(0,0,0));
+        
     }//GEN-LAST:event_productsMouseExited
-
-    private void statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_statusActionPerformed
 
     private void firstnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstnameActionPerformed
         // TODO add your handling code here:
@@ -287,17 +332,68 @@ public class settings extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lastnameActionPerformed
 
-    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+    private void user_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_user_emailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_emailActionPerformed
+    }//GEN-LAST:event_user_emailActionPerformed
 
-    private void typeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeActionPerformed
+    private void sidebarmenu_profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sidebarmenu_profileMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_typeActionPerformed
+    }//GEN-LAST:event_sidebarmenu_profileMouseClicked
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel10MouseClicked
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        new myorder().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        String firstName = firstname.getText();
+        String lastName = lastname.getText();
+        String email = user_email.getText();
+
+        if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please fill all required fields");
+            return;
+        }
+        
+        config con = new config();
+        String updateSQL = "UPDATE user SET firstname = ?, lastname = ?, email = ? WHERE id = ?";
+        con.updateRecord(updateSQL, firstName, lastName, email, Session.getUserId());
+
+        JOptionPane.showMessageDialog(this, "Update Successfull.");
+        
+        new settings().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
+        new productmenu().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_productsMouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to logout?", 
+                "Confirm logout", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                Session sess = new Session();
+                sess.logout();
+                JOptionPane.showMessageDialog(null, "Successfully Logged Out.");
+                login lf = new login();
+                lf.setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void products1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseClicked
+        new Customerdashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_products1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -329,25 +425,27 @@ public class settings extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new settings().setVisible(true);
+                if (Session.getUserId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
+                    login lf = new login();
+                    lf.setVisible(true);
+                } else {
+                    new settings().setVisible(true);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField email;
+    private javax.swing.JButton btn_update;
     private javax.swing.JTextField firstname;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -357,7 +455,7 @@ public class settings extends javax.swing.JFrame {
     private javax.swing.JTextField lastname;
     private javax.swing.JLabel products;
     private javax.swing.JLabel products1;
-    private javax.swing.JTextField status;
-    private javax.swing.JTextField type;
+    private javax.swing.JLabel sidebarmenu_profile;
+    private javax.swing.JTextField user_email;
     // End of variables declaration//GEN-END:variables
 }
