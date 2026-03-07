@@ -89,6 +89,11 @@ public class mycart extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("LOG OUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         products1.setBackground(new java.awt.Color(0, 153, 153));
@@ -312,6 +317,26 @@ public class mycart extends javax.swing.JFrame {
         pf.setVisible (true);
         this.dispose();
     }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+         int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to logout?", 
+                "Confirm logout", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                Session sess = new Session();
+                sess.logout();
+                JOptionPane.showMessageDialog(null, "Successfully Logged Out.");
+                login lf = new login();
+                lf.setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }       
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments

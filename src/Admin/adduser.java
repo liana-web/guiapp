@@ -96,8 +96,6 @@ public class adduser extends javax.swing.JFrame {
         lastname = new javax.swing.JTextField();
         user_type = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -121,36 +119,36 @@ public class adduser extends javax.swing.JFrame {
                 user_emailActionPerformed(evt);
             }
         });
-        jPanel2.add(user_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, 290, 40));
+        jPanel2.add(user_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 290, 40));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("First Name");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 120, 40));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 120, 40));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Last Name");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 120, 40));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 200, 120, 40));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Email");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 100, 40));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 270, 100, 40));
 
         firstname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 firstnameActionPerformed(evt);
             }
         });
-        jPanel2.add(firstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 290, 40));
+        jPanel2.add(firstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, 290, 40));
 
         lastname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lastnameActionPerformed(evt);
             }
         });
-        jPanel2.add(lastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 180, 290, 40));
+        jPanel2.add(lastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 290, 40));
 
         user_type.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         user_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Staff", "Customer" }));
@@ -159,27 +157,12 @@ public class adduser extends javax.swing.JFrame {
                 user_typeActionPerformed(evt);
             }
         });
-        jPanel2.add(user_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 300, 290, 40));
+        jPanel2.add(user_type, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 340, 290, 40));
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Type");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 90, 40));
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("+");
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel2.setPreferredSize(new java.awt.Dimension(100, 100));
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 160, 90));
-
-        jButton1.setText("Add Profile Picture");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 220, -1, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 90, 40));
 
         jButton2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jButton2.setText("SAVE");
@@ -227,30 +210,6 @@ public class adduser extends javax.swing.JFrame {
     private void user_typeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_user_typeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_user_typeActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-    
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png", "gif", "jpeg");
-        fileChooser.setFileFilter(filter);
-
-        int result = fileChooser.showOpenDialog(this);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            String path = selectedFile.getAbsolutePath();
-
-            ImageIcon icon = new ImageIcon(path);
-
-            int width = jLabel2.getWidth();
-            int height = jLabel2.getHeight();
-
-            Image img = icon.getImage();
-            Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-
-            jLabel2.setIcon(new ImageIcon(scaledImg));
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String firstName = firstname.getText();
@@ -329,10 +288,8 @@ public class adduser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField firstname;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;

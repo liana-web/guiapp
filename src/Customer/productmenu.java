@@ -212,6 +212,11 @@ public class productmenu extends javax.swing.JFrame {
         jPanel2.add(cart_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 560, -1, 30));
 
         jButton2.setText("PROCESS ORDER");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -370,6 +375,37 @@ public class productmenu extends javax.swing.JFrame {
         new Customerdashboard().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+                                             
+    StringBuilder receipt = new StringBuilder();
+    receipt.append("          FOOD EXPRESS\n");
+    receipt.append("--------------------------------\n");
+    receipt.append("Item\tQty\tPrice\tSubtotal\n");
+    receipt.append("--------------------------------\n");
+
+    // Replace 'cartTable' with the actual variable name of your Cart JTable
+    double total = 0;
+    for (int i = 0; i < cartTable.getRowCount(); i++) {
+        String name = cartTable.getValueAt(i, 1).toString();
+        String qty = cartTable.getValueAt(i, 3).toString();
+        String price = cartTable.getValueAt(i, 2).toString();
+        String sub = cartTable.getValueAt(i, 4).toString();
+        
+        receipt.append(name + "\t" + qty + "\t" + price + "\t" + sub + "\n");
+    }
+
+    receipt.append("--------------------------------\n");
+    receipt.append("TOTAL: \t\t\t" + cart_total.getText() + "\n");
+    receipt.append("\n    Thank you for your order!");
+
+    // Launch the receipt form and pass the data
+    receiptform rf = new receiptform(receipt.toString());
+    rf.setVisible(true);
+    rf.setLocationRelativeTo(null); // Center on screen
+    this.dispose(); // Close the menu after processing
+
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments

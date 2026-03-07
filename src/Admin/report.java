@@ -5,6 +5,10 @@
  */
 package Admin;
 
+import config.Session;
+import guiapp.login;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Juliana Ritz Magat
@@ -50,6 +54,11 @@ public class report extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("LOG OUT");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
         jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -112,6 +121,26 @@ public class report extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to logout?", 
+                "Confirm logout", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                Session sess = new Session();
+                sess.logout();
+                JOptionPane.showMessageDialog(null, "Successfully Logged Out.");
+                login lf = new login();
+                lf.setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }       
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * @param args the command line arguments
