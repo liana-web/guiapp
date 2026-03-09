@@ -47,6 +47,7 @@ public class updateproduct extends javax.swing.JFrame {
             if (rs.next()) {
                 product_name.setText(rs.getString("product_name"));
                 product_price.setText(rs.getString("product_price"));
+                product_qty.setValue(rs.getInt("product_quantity"));
                 product_status.setSelectedItem(rs.getString("product_status"));
                 
                 rs.close();
@@ -85,6 +86,8 @@ public class updateproduct extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         product_status = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        product_qty = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,8 +154,8 @@ public class updateproduct extends javax.swing.JFrame {
         jLabel9.setText("Product Name");
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 160, 90, 30));
 
-        jLabel10.setText("Status");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 50, 20));
+        jLabel10.setText("Quantity");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 50, 30));
 
         jLabel11.setText("Price");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, 50, 20));
@@ -175,7 +178,7 @@ public class updateproduct extends javax.swing.JFrame {
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 470, 210, 70));
 
         product_status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
-        jPanel2.add(product_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 230, 50));
+        jPanel2.add(product_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 330, 230, 50));
 
         jButton2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jButton2.setText("CANCEL");
@@ -185,6 +188,10 @@ public class updateproduct extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 470, 210, 70));
+
+        jLabel12.setText("Status");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 50, 40));
+        jPanel2.add(product_qty, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, 230, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,6 +220,7 @@ public class updateproduct extends javax.swing.JFrame {
         String p_name = product_name.getText();
         String p_price = product_price.getText();
         String p_status = product_status.getSelectedItem().toString();
+        String p_qty = product_qty.getValue().toString();
 
         if(p_name.isEmpty() || p_price.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Please fill all required fields");
@@ -221,8 +229,8 @@ public class updateproduct extends javax.swing.JFrame {
 
         config con = new config();
         
-        String updateSQL = "UPDATE products SET product_name = ?, product_price = ?, product_status = ? WHERE id = ?";
-        con.updateRecord(updateSQL, p_name, p_price, p_status, this.updateId);
+        String updateSQL = "UPDATE products SET product_name = ?, product_price = ?, product_quantity = ? ,product_status = ? WHERE id = ?";
+        con.updateRecord(updateSQL, p_name, p_price, p_qty, p_status, this.updateId);
 
         JOptionPane.showMessageDialog(this, "Product sucessfully updated.");
 
@@ -302,6 +310,7 @@ public class updateproduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -314,6 +323,7 @@ public class updateproduct extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTextField product_name;
     private javax.swing.JTextField product_price;
+    private javax.swing.JSpinner product_qty;
     private javax.swing.JComboBox<String> product_status;
     // End of variables declaration//GEN-END:variables
 }

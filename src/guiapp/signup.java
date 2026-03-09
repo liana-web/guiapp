@@ -210,29 +210,35 @@ public class signup extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void registerUser(String fname, String lname, String email, String pass) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(emailRegex);
+
+        if (email == null || !pattern.matcher(email).matches()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid email format! Please follow this email format test@test.com");
+            return;
+        }
+
         String url = "jdbc:sqlite:food.db";
         String user = "root";
-        String password = ""; // Your DB password
+        String password = ""; 
 
-        // SQL to create table if it doesn't exist
         String createTableSQL = "CREATE TABLE IF NOT EXISTS user ("
-                + "id INT AUTO_INCREMENT PRIMARY KEY,"
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "firstname VARCHAR(50),"
                 + "lastname VARCHAR(50),"
-                + "email VARCHAR(100),"
-                + "password VARCHAR(100)"
+                + "email VARCHAR(100) UNIQUE,"
+                + "password VARCHAR(100),"
+                + "type VARCHAR(20),"
+                + "status VARCHAR(20)"
                 + ")";
 
-        // SQL to insert data
         String insertSQL = "INSERT INTO user (firstname, lastname, email, password, type, status) VALUES (?, ?, ?, ?, 'Customer', 'Active')";
 
         try (java.sql.Connection conn = java.sql.DriverManager.getConnection(url, user, password);
              java.sql.Statement stmt = conn.createStatement()) {
 
-            // 1. Create the table first
             stmt.executeUpdate(createTableSQL);
 
-            // 2. Prepare the insert statement
             try (java.sql.PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                 pstmt.setString(1, fname);
                 pstmt.setString(2, lname);
@@ -240,17 +246,18 @@ public class signup extends javax.swing.JFrame {
                 pstmt.setString(4, pass);
 
                 pstmt.executeUpdate();
-                javax.swing.JOptionPane.showMessageDialog(this, "Table checked and Data saved successfully!");
-                
-                login lf = new login ();
-                lf.setLocationRelativeTo(null);
-                lf.setVisible (true);
+                javax.swing.JOptionPane.showMessageDialog(this, "Registration Successful!");
+
+                new login().setVisible(true);
                 this.dispose();
             }
 
         } catch (java.sql.SQLException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
-            e.printStackTrace(); // Good for debugging in the terminal
+            if (e.getMessage().contains("UNIQUE constraint failed")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "This email is already registered. Please input other email address.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+            }
         }
     }
     

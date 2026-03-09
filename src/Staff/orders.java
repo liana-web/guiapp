@@ -5,6 +5,7 @@
  */
 package Staff;
 
+import Admin.reprintreceiptform;
 import config.Session;
 import config.config;
 import guiapp.login;
@@ -17,20 +18,20 @@ import javax.swing.JOptionPane;
  *
  * @author Juliana Ritz Magat
  */
-public class Staffdashboard extends javax.swing.JFrame {
+public class orders extends javax.swing.JFrame {
 
     /**
-     * Creates new form Staffdashboard
+     * Creates new form orders
      */
-    public Staffdashboard() {
+    public orders() {
         initComponents();
-        displayCustomers();
+        displayOrders();
     }
     
-    void displayCustomers() {
+    void displayOrders() {
         config con = new config();
-        String sql = "SELECT id, firstname, lastname, email, type, status FROM user WHERE type = 'Customer'";
-        con.displayData(sql,customer_table);
+        String sql = "SELECT o_id AS 'Order ID', o_date AS 'Order Date', o_status AS 'Order Status', (SELECT SUM(product_price * quantity) FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE o.o_id = c.order_id) AS 'Amount' FROM tbl_orders o";
+        con.displayData(sql,ordersTable);      
     }
 
     /**
@@ -47,14 +48,14 @@ public class Staffdashboard extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        products = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
+        sidebarmenu_myorders = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        customer_table = new javax.swing.JTable();
+        ordersTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -82,24 +83,6 @@ public class Staffdashboard extends javax.swing.JFrame {
         });
         jPanel6.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
-        products.setBackground(new java.awt.Color(0, 153, 153));
-        products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        products.setForeground(new java.awt.Color(255, 255, 255));
-        products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("ORDERS");
-        products.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                productsMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                productsMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                productsMouseExited(evt);
-            }
-        });
-        jPanel6.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 130, 50));
-
         products1.setBackground(new java.awt.Color(0, 153, 153));
         products1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products1.setForeground(new java.awt.Color(255, 255, 255));
@@ -116,7 +99,18 @@ public class Staffdashboard extends javax.swing.JFrame {
                 products1MouseExited(evt);
             }
         });
-        jPanel6.add(products1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 50));
+        jPanel6.add(products1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 150, 50));
+
+        sidebarmenu_myorders.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        sidebarmenu_myorders.setForeground(new java.awt.Color(255, 255, 255));
+        sidebarmenu_myorders.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sidebarmenu_myorders.setText("ORDERS");
+        sidebarmenu_myorders.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myordersMouseClicked(evt);
+            }
+        });
+        jPanel6.add(sidebarmenu_myorders, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 50));
 
         jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
 
@@ -141,12 +135,12 @@ public class Staffdashboard extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CUSTOMERS LIST");
+        jLabel1.setText("ORDERS");
         jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 480, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
 
-        customer_table.setModel(new javax.swing.table.DefaultTableModel(
+        ordersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -154,20 +148,21 @@ public class Staffdashboard extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Order ID", "Date", "Status", "Total Amount"
             }
         ));
-        jScrollPane1.setViewportView(customer_table);
+        jScrollPane1.setViewportView(ordersTable);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 680, 350));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 680, 390));
 
-        jButton1.setText("Add New Order");
+        jButton1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton1.setText("View Receipt");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, 150, 50));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 550, 110, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,47 +183,6 @@ public class Staffdashboard extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void productsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseEntered
-        products.setBackground(new java.awt.Color(100,100,100));
-        products.setOpaque(true);       // TODO add your handling code here:
-    }//GEN-LAST:event_productsMouseEntered
-
-    private void productsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseExited
-        products.setBackground(new java.awt.Color(0,0,0));
-    }//GEN-LAST:event_productsMouseExited
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        int row = customer_table.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a Customer first.");
-            return;
-        }
-
-        String customerId = customer_table.getValueAt(row, 0).toString();
-        
-        staffmenu sm = new staffmenu(customerId);
-        sm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1MouseClicked
-
-    private void products1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_products1MouseEntered
-
-    private void products1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_products1MouseExited
-
-    private void products1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseClicked
-        new Staffdashboard().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_products1MouseClicked
-
-    private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
-        new orders().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_productsMouseClicked
-
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Are you sure you want to logout?", 
@@ -246,8 +200,90 @@ public class Staffdashboard extends javax.swing.JFrame {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             }
-        }
+        }       
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void products1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseClicked
+        new Staffdashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_products1MouseClicked
+
+    private void products1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_products1MouseEntered
+
+    private void products1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products1MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_products1MouseExited
+
+    private void sidebarmenu_myordersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sidebarmenu_myordersMouseClicked
+        new orders().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_sidebarmenu_myordersMouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        int row = ordersTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an order first.");
+            return;
+        }
+
+        String orderID = ordersTable.getValueAt(row, 0).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("          FOOD EXPRESS\n");
+        sb.append("--------------------------------\n");
+
+        config conf = new config(); 
+
+        try (Connection conn = conf.connectDB()) { 
+            // 1. Fetch Customer Name and Date (Joining tbl_orders and user)
+            String sqlHeader = "SELECT u.firstname, u.lastname, o.o_date " +
+                               "FROM tbl_orders o JOIN user u ON o.u_id = u.id " +
+                               "WHERE o.o_id = ?";
+            PreparedStatement pstH = conn.prepareStatement(sqlHeader);
+            pstH.setString(1, orderID);
+            ResultSet rsH = pstH.executeQuery();
+
+            if (rsH.next()) {
+                sb.append("Customer: ").append(rsH.getString("firstname")).append(" ")
+                  .append(rsH.getString("lastname")).append("\n");
+                sb.append("Date: ").append(rsH.getString("o_date")).append("\n");
+            }
+
+            sb.append("Order ID: #").append(orderID).append("\n");
+            sb.append("--------------------------------\n");
+            sb.append(String.format("%-15s %-5s %-10s\n", "Product", "Qty", "Price"));
+            sb.append("--------------------------------\n");
+
+            // 2. Fetch ALL products in the order (Joining tbl_cart and products)
+            String sqlItems = "SELECT p.product_name, c.quantity, p.product_price " +
+                              "FROM tbl_cart c JOIN products p ON c.product_id = p.id " +
+                              "WHERE c.order_id = ?";
+            PreparedStatement pstI = conn.prepareStatement(sqlItems);
+            pstI.setString(1, orderID);
+            ResultSet rsI = pstI.executeQuery();
+
+            // This loop is the key: it continues as long as there are items in the cart for this order
+            while (rsI.next()) {
+                String name = rsI.getString("product_name");
+                int qty = rsI.getInt("quantity");
+                double price = rsI.getDouble("product_price");
+                sb.append(String.format("%-15s %-5d %-10.2f\n", name, qty, price));
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+        }
+
+        sb.append("--------------------------------\n");
+        sb.append("TOTAL: ").append(ordersTable.getValueAt(row, 3).toString()).append("\n");
+        sb.append("\n   Thank you for your order!");
+
+        // Pass the built string to your receiptform
+        staffreceiptform rf = new staffreceiptform(sb.toString());
+        rf.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -266,32 +302,25 @@ public class Staffdashboard extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Staffdashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(orders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Staffdashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(orders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Staffdashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(orders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Staffdashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(orders.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                if (Session.getUserId() == 0) {
-//                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
-//                    login lf = new login();
-//                    lf.setVisible(true);
-//                } else {
-                    new Staffdashboard().setVisible(true);
-//                }
+                new orders().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable customer_table;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -303,7 +332,8 @@ public class Staffdashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel products;
+    private javax.swing.JTable ordersTable;
     private javax.swing.JLabel products1;
+    private javax.swing.JLabel sidebarmenu_myorders;
     // End of variables declaration//GEN-END:variables
 }

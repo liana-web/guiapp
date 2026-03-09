@@ -303,67 +303,67 @@ public class myorder extends javax.swing.JFrame {
     }//GEN-LAST:event_products1MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-  int row = ordersTable.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select an order first.");
-        return;
-    }
-
-    String orderID = ordersTable.getValueAt(row, 0).toString();
-    StringBuilder sb = new StringBuilder();
-    sb.append("          FOOD EXPRESS\n");
-    sb.append("--------------------------------\n");
-
-    config conf = new config(); 
-
-    try (Connection conn = conf.connectDB()) { 
-        // 1. Fetch Customer Name and Date (Joining tbl_orders and user)
-        String sqlHeader = "SELECT u.firstname, u.lastname, o.o_date " +
-                           "FROM tbl_orders o JOIN user u ON o.u_id = u.id " +
-                           "WHERE o.o_id = ?";
-        PreparedStatement pstH = conn.prepareStatement(sqlHeader);
-        pstH.setString(1, orderID);
-        ResultSet rsH = pstH.executeQuery();
-
-        if (rsH.next()) {
-            sb.append("Customer: ").append(rsH.getString("firstname")).append(" ")
-              .append(rsH.getString("lastname")).append("\n");
-            sb.append("Date: ").append(rsH.getString("o_date")).append("\n");
-        }
-        
-        sb.append("Order ID: #").append(orderID).append("\n");
-        sb.append("--------------------------------\n");
-        sb.append(String.format("%-15s %-5s %-10s\n", "Product", "Qty", "Price"));
-        sb.append("--------------------------------\n");
-
-        // 2. Fetch ALL products in the order (Joining tbl_cart and products)
-        String sqlItems = "SELECT p.product_name, c.quantity, p.product_price " +
-                          "FROM tbl_cart c JOIN products p ON c.product_id = p.id " +
-                          "WHERE c.order_id = ?";
-        PreparedStatement pstI = conn.prepareStatement(sqlItems);
-        pstI.setString(1, orderID);
-        ResultSet rsI = pstI.executeQuery();
-
-        // This loop is the key: it continues as long as there are items in the cart for this order
-        while (rsI.next()) {
-            String name = rsI.getString("product_name");
-            int qty = rsI.getInt("quantity");
-            double price = rsI.getDouble("product_price");
-            sb.append(String.format("%-15s %-5d %-10.2f\n", name, qty, price));
+        int row = ordersTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an order first.");
+            return;
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
-    }
+        String orderID = ordersTable.getValueAt(row, 0).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("          FOOD EXPRESS\n");
+        sb.append("--------------------------------\n");
 
-    sb.append("--------------------------------\n");
-    sb.append("TOTAL: ").append(ordersTable.getValueAt(row, 3).toString()).append("\n");
-    sb.append("\n   Thank you for your order!");
+        config conf = new config(); 
 
-    // Pass the built string to your receiptform
-    receiptform rf = new receiptform(sb.toString());
-    rf.setVisible(true);
-    rf.setLocationRelativeTo(null);
+        try (Connection conn = conf.connectDB()) { 
+            // 1. Fetch Customer Name and Date (Joining tbl_orders and user)
+            String sqlHeader = "SELECT u.firstname, u.lastname, o.o_date " +
+                               "FROM tbl_orders o JOIN user u ON o.u_id = u.id " +
+                               "WHERE o.o_id = ?";
+            PreparedStatement pstH = conn.prepareStatement(sqlHeader);
+            pstH.setString(1, orderID);
+            ResultSet rsH = pstH.executeQuery();
+
+            if (rsH.next()) {
+                sb.append("Customer: ").append(rsH.getString("firstname")).append(" ")
+                  .append(rsH.getString("lastname")).append("\n");
+                sb.append("Date: ").append(rsH.getString("o_date")).append("\n");
+            }
+
+            sb.append("Order ID: #").append(orderID).append("\n");
+            sb.append("--------------------------------\n");
+            sb.append(String.format("%-15s %-5s %-10s\n", "Product", "Qty", "Price"));
+            sb.append("--------------------------------\n");
+
+            // 2. Fetch ALL products in the order (Joining tbl_cart and products)
+            String sqlItems = "SELECT p.product_name, c.quantity, p.product_price " +
+                              "FROM tbl_cart c JOIN products p ON c.product_id = p.id " +
+                              "WHERE c.order_id = ?";
+            PreparedStatement pstI = conn.prepareStatement(sqlItems);
+            pstI.setString(1, orderID);
+            ResultSet rsI = pstI.executeQuery();
+
+            // This loop is the key: it continues as long as there are items in the cart for this order
+            while (rsI.next()) {
+                String name = rsI.getString("product_name");
+                int qty = rsI.getInt("quantity");
+                double price = rsI.getDouble("product_price");
+                sb.append(String.format("%-15s %-5d %-10.2f\n", name, qty, price));
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+        }
+
+        sb.append("--------------------------------\n");
+        sb.append("TOTAL: ").append(ordersTable.getValueAt(row, 3).toString()).append("\n");
+        sb.append("\n   Thank you for your order!");
+
+        // Pass the built string to your receiptform
+        receiptform rf = new receiptform(sb.toString());
+        rf.setVisible(true);
+        rf.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton1MouseClicked
 
     /**

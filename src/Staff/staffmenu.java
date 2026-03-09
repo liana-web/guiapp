@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Customer;
+package Staff;
 
-import Staff.staffmenu;
+import Customer.myorder;
 import config.Session;
 import config.config;
 import guiapp.login;
@@ -19,36 +19,26 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Juliana Ritz Magat
  */
-public class productmenu extends javax.swing.JFrame {
-
+public class staffmenu extends javax.swing.JFrame {
+    
     private int orderIdToUse;
+    private int userId;
 
     /**
-     * Creates new form productmenu
+     * Creates new form staffmenu
      */
-    public productmenu() {
+    public staffmenu(String customerId) {
         initComponents();
         displayProducts();
-
-        if (orderIdToUse > 0) {
-            fetchCartData(this.orderIdToUse);
-        }
-    }
-    
-    void displayProducts() {
+        
         config con = new config();
-        String sql = "SELECT id, product_name, product_price, product_status, " +
-                     "CASE WHEN product_quantity = 0 THEN 'Out of Stock' ELSE CAST(product_quantity AS TEXT) END AS 'Quantity' " +
-                     "FROM products WHERE product_status = 'Active'";
-        con.displayData(sql, productTable);
-
-        productTable.getColumnModel().getColumn(4).setCellRenderer(new productmenu.StockRenderer());
+        this.userId = Integer.parseInt(customerId);
+        String customerName = con.getUserFullName(this.userId);
+        customer.setText(customerName);
     }
-    
-    private void fetchCartData(int orderID) {
-        config con = new config();
-        String sql = "SELECT p.id AS 'ID', p.product_name AS 'Product Name', p.product_price AS 'Product Price', c.quantity AS 'Quantity', (product_price * quantity) AS 'Subtotal' FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE c.order_id = " + orderID;
-        con.displayData(sql, cartTable); 
+
+    private staffmenu() {
+        
     }
     
     class StockRenderer extends javax.swing.table.DefaultTableCellRenderer {
@@ -67,6 +57,22 @@ public class productmenu extends javax.swing.JFrame {
             return c;
         }
     }
+    
+    void displayProducts() {
+        config con = new config();
+        String sql = "SELECT id, product_name, product_price, product_status, " +
+                     "CASE WHEN product_quantity = 0 THEN 'Out of Stock' ELSE CAST(product_quantity AS TEXT) END AS 'Quantity' " +
+                     "FROM products WHERE product_status = 'Active'";
+        con.displayData(sql, productTable);
+
+        productTable.getColumnModel().getColumn(4).setCellRenderer(new StockRenderer());
+    }
+    
+    private void fetchCartData(int orderID) {
+        config con = new config();
+        String sql = "SELECT p.id AS 'ID', p.product_name AS 'Product Name', p.product_price AS 'Product Price', c.quantity AS 'Quantity', (product_price * quantity) AS 'Subtotal' FROM tbl_cart c INNER JOIN products p ON c.product_id = p.id WHERE c.order_id = " + orderID;
+        con.displayData(sql, cartTable); 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,9 +87,7 @@ public class productmenu extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -96,6 +100,7 @@ public class productmenu extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         cart_total = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        customer = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,29 +114,28 @@ public class productmenu extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("LOG OUT");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
         jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("DASHBOARD");
+        jLabel3.setText("CUSTOMERS");
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
             }
         });
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 150, 40));
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("MENU");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 150, 40));
+        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 150, 50));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("MY ORDERS");
+        jLabel5.setText("ORDERS");
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
@@ -140,18 +144,7 @@ public class productmenu extends javax.swing.JFrame {
                 jLabel5MouseEntered(evt);
             }
         });
-        jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 280, 150, 40));
-
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("PROFILE");
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel8MouseClicked(evt);
-            }
-        });
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 150, 40));
+        jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 50));
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
 
@@ -179,7 +172,7 @@ public class productmenu extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(productTable);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 680, 170));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 680, 170));
 
         jButton3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButton3.setText("Add to Cart");
@@ -193,7 +186,7 @@ public class productmenu extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 140, 130, 30));
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 190, 130, 30));
 
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -208,15 +201,15 @@ public class productmenu extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(cartTable);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, -1, 180));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, 130));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("PRODUCTS");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 130, 30));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 190, 130, 30));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("CART");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 350, 130, 30));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 400, 130, 30));
 
         jButton1.setText("REMOVE ITEM");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -248,6 +241,10 @@ public class productmenu extends javax.swing.JFrame {
         });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 500, 200, 60));
 
+        customer.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        customer.setText("Customer");
+        jPanel2.add(customer, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 680, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -269,6 +266,18 @@ public class productmenu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+       
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseEntered
+
+    }//GEN-LAST:event_jLabel5MouseEntered
+
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         int selectedRow = productTable.getSelectedRow();
 
@@ -289,7 +298,7 @@ public class productmenu extends javax.swing.JFrame {
 
         if (qty != null && !qty.trim().isEmpty()) {
             config con = new config();
-            int userId = Session.getUserId();
+            int userId = this.userId;
 
             // 1. Get or Create the Pending Order
             int existingOrderId = con.getSingleValue("SELECT o_id FROM tbl_orders WHERE u_id = ? AND o_status = 'Pending'", userId);
@@ -329,6 +338,10 @@ public class productmenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1MouseClicked
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int selectedRow = cartTable.getSelectedRow();
 
@@ -361,6 +374,10 @@ public class productmenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+
+    }//GEN-LAST:event_jButton2MouseClicked
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Are you sure you want to process this order?", 
@@ -369,102 +386,68 @@ public class productmenu extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             config con = new config();
-            String oID = String.valueOf(this.orderIdToUse); // Convert once for efficiency
 
-            // SQL to deduct stock
-            String stockUpdateSQL = "UPDATE products SET product_quantity = product_quantity - " +
-                                    "(SELECT quantity FROM tbl_cart WHERE product_id = products.id AND order_id = ?) " +
+            // 1. SQL to update (deduct) product quantity based on cart contents
+            String stockUpdateSQL = "UPDATE products " +
+                                    "SET product_quantity = product_quantity - (SELECT quantity FROM tbl_cart WHERE product_id = products.id AND order_id = ?) " +
                                     "WHERE id IN (SELECT product_id FROM tbl_cart WHERE order_id = ?)";
 
-            // SQL to update order status
+            // 2. SQL to update order status
             String orderStatusSQL = "UPDATE tbl_orders SET o_status = 'Processed' WHERE o_id = ?";
 
             try (Connection conn = con.connectDB()) {
-                conn.setAutoCommit(false); // Start transaction 
+                // We do this manually to ensure both updates happen together
+                conn.setAutoCommit(false); 
 
                 try {
-                    // 1. Deduct the stocks
+                    // Deduct the stocks
                     PreparedStatement pstStock = conn.prepareStatement(stockUpdateSQL);
-                    pstStock.setString(1, oID);
-                    pstStock.setString(2, oID);
+                    pstStock.setString(1, String.valueOf(this.orderIdToUse));
+                    pstStock.setString(2, String.valueOf(this.orderIdToUse));
                     pstStock.executeUpdate();
 
-                    // 2. Update order status
+                    // Update order status
                     PreparedStatement pstOrder = conn.prepareStatement(orderStatusSQL);
-                    pstOrder.setString(1, oID);
+                    pstOrder.setString(1, String.valueOf(this.orderIdToUse));
                     pstOrder.executeUpdate();
 
-                    // 3. Commit changes to database
+                    // Save changes
                     conn.commit(); 
 
                     JOptionPane.showMessageDialog(this, "Order processed and stock updated successfully!");
 
-                    new myorder().setVisible(true);
+                    new orders().setVisible(true);
                     this.dispose();
 
                 } catch (Exception e) {
-                    conn.rollback(); // Undo everything if an error occurs 
-                    JOptionPane.showMessageDialog(this, "Transaction Failed (Rolling back): " + e.getMessage());
+                    conn.rollback(); // Undo changes if something goes wrong
+                    JOptionPane.showMessageDialog(this, "Transaction Failed: " + e.getMessage());
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Database Connection Error: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1MouseClicked
-
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        new settings().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel8MouseClicked
-
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        new myorder().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel5MouseClicked
-
-    private void jLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseEntered
-
-    }//GEN-LAST:event_jLabel5MouseEntered
-
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        new Customerdashboard().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel3MouseClicked
-
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-                                             
-    StringBuilder receipt = new StringBuilder();
-    receipt.append("          FOOD EXPRESS\n");
-    receipt.append("--------------------------------\n");
-    receipt.append("Item\tQty\tPrice\tSubtotal\n");
-    receipt.append("--------------------------------\n");
-
-    // Replace 'cartTable' with the actual variable name of your Cart JTable
-    double total = 0;
-    for (int i = 0; i < cartTable.getRowCount(); i++) {
-        String name = cartTable.getValueAt(i, 1).toString();
-        String qty = cartTable.getValueAt(i, 3).toString();
-        String price = cartTable.getValueAt(i, 2).toString();
-        String sub = cartTable.getValueAt(i, 4).toString();
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to logout?", 
+                "Confirm logout", 
+                JOptionPane.YES_NO_OPTION);
         
-        receipt.append(name + "\t" + qty + "\t" + price + "\t" + sub + "\n");
-    }
-
-    receipt.append("--------------------------------\n");
-    receipt.append("TOTAL: \t\t\t" + cart_total.getText() + "\n");
-    receipt.append("\n    Thank you for your order!");
-
-    // Launch the receipt form and pass the data
-    receiptform rf = new receiptform(receipt.toString());
-    rf.setVisible(true);
-    rf.setLocationRelativeTo(null); // Center on screen
-    this.dispose(); // Close the menu after processing
-
-    }//GEN-LAST:event_jButton2MouseClicked
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                Session sess = new Session();
+                sess.logout();
+                JOptionPane.showMessageDialog(null, "Successfully Logged Out.");
+                login lf = new login();
+                lf.setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }       
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -483,26 +466,20 @@ public class productmenu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(staffmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(staffmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(staffmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(productmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(staffmenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                if (Session.getUserId() == 0) {
-                    JOptionPane.showMessageDialog(null, "Session expired. Please log in.");
-                    login lf = new login();
-                    lf.setVisible(true);
-                } else {
-                    new productmenu().setVisible(true);
-                }
+                new staffmenu().setVisible(true);
             }
         });
     }
@@ -510,6 +487,7 @@ public class productmenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable cartTable;
     private javax.swing.JLabel cart_total;
+    private javax.swing.JLabel customer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -517,9 +495,7 @@ public class productmenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

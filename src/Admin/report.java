@@ -5,9 +5,15 @@
  */
 package Admin;
 
+import Customer.receiptform;
 import config.Session;
+import config.config;
 import guiapp.login;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,6 +26,11 @@ public class report extends javax.swing.JFrame {
      */
     public report() {
         initComponents();
+        loadAdminReport();
+        
+        jPanel2.requestFocusInWindow();
+        txtSearch.setText("Type to search....");
+
     }
 
     /**
@@ -32,66 +43,18 @@ public class report extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        reportTable = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        lblGrandTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(255, 238, 208));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel5.setBackground(new java.awt.Color(0, 56, 34));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("LOG OUT");
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
-            }
-        });
-        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("DASHBOARD");
-        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 150, 40));
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("PRODUCTS");
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 40));
-
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("REPORTS");
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 150, 40));
-
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("USERS");
-        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 150, 40));
-
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("PROFILE");
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 150, 40));
-
-        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
 
         jPanel3.setBackground(new java.awt.Color(0, 56, 34));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -100,9 +63,71 @@ public class report extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("REPORTS");
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 360, 50));
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, 360, 50));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 730, 130));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 130));
+
+        reportTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Order_Id", "Customer_Name", "Order_Date", "Amount"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(reportTable);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 810, 300));
+
+        jButton2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButton2.setText("Reprint");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 543, 100, 30));
+
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+        jPanel2.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(549, 142, 270, 30));
+
+        lblGrandTotal.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblGrandTotal.setText("Total Sales:");
+        jPanel2.add(lblGrandTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 490, 340, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,27 +145,121 @@ public class report extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        int confirm = JOptionPane.showConfirmDialog(this, 
-                "Are you sure you want to logout?", 
-                "Confirm logout", 
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                Session sess = new Session();
-                sess.logout();
-                JOptionPane.showMessageDialog(null, "Successfully Logged Out.");
-                login lf = new login();
-                lf.setVisible(true);
-                this.dispose();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        int row = reportTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an order first.");
+            return;
+        }
+
+        String orderID = reportTable.getValueAt(row, 0).toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("          FOOD EXPRESS\n");
+        sb.append("--------------------------------\n");
+
+        config conf = new config(); 
+
+        try (Connection conn = conf.connectDB()) { 
+            // 1. Fetch Customer Name and Date (Joining tbl_orders and user)
+            String sqlHeader = "SELECT u.firstname, u.lastname, o.o_date " +
+                               "FROM tbl_orders o JOIN user u ON o.u_id = u.id " +
+                               "WHERE o.o_id = ?";
+            PreparedStatement pstH = conn.prepareStatement(sqlHeader);
+            pstH.setString(1, orderID);
+            ResultSet rsH = pstH.executeQuery();
+
+            if (rsH.next()) {
+                sb.append("Customer: ").append(rsH.getString("firstname")).append(" ")
+                  .append(rsH.getString("lastname")).append("\n");
+                sb.append("Date: ").append(rsH.getString("o_date")).append("\n");
             }
-        }       
-    }//GEN-LAST:event_jLabel2MouseClicked
+
+            sb.append("Order ID: #").append(orderID).append("\n");
+            sb.append("--------------------------------\n");
+            sb.append(String.format("%-15s %-5s %-10s\n", "Product", "Qty", "Price"));
+            sb.append("--------------------------------\n");
+
+            // 2. Fetch ALL products in the order (Joining tbl_cart and products)
+            String sqlItems = "SELECT p.product_name, c.quantity, p.product_price " +
+                              "FROM tbl_cart c JOIN products p ON c.product_id = p.id " +
+                              "WHERE c.order_id = ?";
+            PreparedStatement pstI = conn.prepareStatement(sqlItems);
+            pstI.setString(1, orderID);
+            ResultSet rsI = pstI.executeQuery();
+
+            // This loop is the key: it continues as long as there are items in the cart for this order
+            while (rsI.next()) {
+                String name = rsI.getString("product_name");
+                int qty = rsI.getInt("quantity");
+                double price = rsI.getDouble("product_price");
+                sb.append(String.format("%-15s %-5d %-10.2f\n", name, qty, price));
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+        }
+
+        sb.append("--------------------------------\n");
+        sb.append("TOTAL: ").append(reportTable.getValueAt(row, 3).toString()).append("\n");
+        sb.append("\n   Thank you for your order!");
+
+        // Pass the built string to your receiptform
+        reprintreceiptform rf = new reprintreceiptform(sb.toString());
+        rf.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        DefaultTableModel model = (DefaultTableModel) reportTable.getModel();
+        model.setRowCount(0);
+        String searchKey = txtSearch.getText();
+        config con = new config();
+        double total_amount = 0;
+
+        // Added placeholders (?) for the search logic
+        String sql = "SELECT o.o_id, u.firstname || ' ' || u.lastname AS 'Customer', " +
+                     "o.o_date, o.o_status, " +
+                     "(SELECT SUM(p.product_price * c.quantity) FROM tbl_cart c " +
+                     "INNER JOIN products p ON c.product_id = p.id WHERE c.order_id = o.o_id) AS 'Amount' " +
+                     "FROM tbl_orders o INNER JOIN user u ON o.u_id = u.id " +
+                     "WHERE o.o_status = 'Processed' AND (u.firstname LIKE ? OR u.lastname LIKE ? OR o.o_id LIKE ?)";
+
+        try (Connection conn = con.connectDB()) {
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "%" + searchKey + "%");
+            pst.setString(2, "%" + searchKey + "%");
+            pst.setString(3, "%" + searchKey + "%");
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("o_id");
+                String name = rs.getString("Customer"); // Must use alias name here
+                String date = rs.getString("o_date");
+                double amount = rs.getDouble("Amount"); // Use alias "Amount"
+
+                total_amount += amount; // Calculate total for search results
+                model.addRow(new Object[]{id, name, date, String.format("%.2f", amount)});
+            }
+
+            // Update the Grand Total label to reflect the search results
+            lblGrandTotal.setText("Grand Total: ₱ " + String.format("%.2f", total_amount));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Search Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+       txtSearch.setText("Type to search....");
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+       txtSearch.setText("");
+    }//GEN-LAST:event_txtSearchFocusGained
 
     /**
      * @param args the command line arguments
@@ -175,18 +294,95 @@ public class report extends javax.swing.JFrame {
                 new report().setVisible(true);
             }
         });
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("          FOOD EXPRESS\n");
+//        sb.append("--------------------------------\n");
+//
+//        config conf = new config();
+//        try (Connection conn = conf.connectDB()) {
+//            // Get Customer Name and Date
+//            String sqlH = "SELECT u.firstname, u.lastname, o.o_date FROM tbl_orders o " +
+//                          "JOIN user u ON o.u_id = u.id WHERE o.o_id = ?";
+//            PreparedStatement pstH = conn.prepareStatement(sqlH);
+//                String orderID = null;
+//            pstH.setString(1, orderID);
+//            ResultSet rsH = pstH.executeQuery();
+//
+//            if (rsH.next()) {
+//                sb.append("Customer: ").append(rsH.getString("firstname")).append(" ")
+//                  .append(rsH.getString("lastname")).append("\n");
+//                sb.append("Date: ").append(rsH.getString("o_date")).append("\n");
+//            }
+//
+//            // Get all products linked to this Order ID
+//            String sqlI = "SELECT p.product_name, c.quantity, p.product_price FROM tbl_cart c " +
+//                          "JOIN products p ON c.product_id = p.id WHERE c.order_id = ?";
+//            PreparedStatement pstI = conn.prepareStatement(sqlI);
+//            pstI.setString(1, orderID);
+//            ResultSet rsI = pstI.executeQuery();
+//
+//            while (rsI.next()) {
+//                sb.append(String.format("%-15s %-5d %-10.2f\n", 
+//                    rsI.getString("product_name"), rsI.getInt("quantity"), rsI.getDouble("product_price")));
+//            }
+//        } catch (Exception e) {
+//            //JOptionPane.showMessageDialog(this, "Reprint Error: " + e.getMessage());
+//        }
+//
+//        // Opens the receipt form
+//        receiptform rf = new receiptform(sb.toString());
+//        rf.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblGrandTotal;
+    private javax.swing.JTable reportTable;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    private void loadAdminReport() {
+        DefaultTableModel model = (DefaultTableModel) reportTable.getModel();
+        model.setRowCount(0); // Clear existing rows
+        double grandTotal = 0;
+        config con = new config();
+
+        String sql = "SELECT o.o_id, u.firstname || ' ' || u.lastname AS 'Customer', " +
+                     "o.o_date, o.o_status, " +
+                     "(SELECT SUM(p.product_price * c.quantity) FROM tbl_cart c " +
+                     "INNER JOIN products p ON c.product_id = p.id WHERE c.order_id = o.o_id) AS 'Amount' " +
+                     "FROM tbl_orders o INNER JOIN user u ON o.u_id = u.id " +
+                     "WHERE o.o_status = 'Processed'";
+
+        try (Connection conn = con.connectDB();
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                double rowAmount = rs.getDouble("Amount");
+                grandTotal += rowAmount;
+
+                model.addRow(new Object[]{
+                    rs.getString("o_id"),
+                    rs.getString("Customer"),
+                    rs.getString("o_date"),
+                    String.format("%.2f", rowAmount)
+                });
+            }
+
+            lblGrandTotal.setText("Grand Total: ₱ " + String.format("%.2f", grandTotal));
+
+        } catch (Exception e) {
+            System.out.println("Error loading report: " + e.getMessage());
+        }
+    }
+
+    private void buildAndShowReceipt(String orderID) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

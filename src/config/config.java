@@ -32,6 +32,25 @@ public class config {
         return con;
     }
     
+    public String getUserFullName(int userId) {
+        String fullName = "";
+        String sql = "SELECT firstname || ' ' || lastname AS full_name FROM user WHERE id = ?";
+
+        try (Connection conn = this.connectDB();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, userId);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    fullName = rs.getString("full_name");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching full name: " + e.getMessage());
+        }
+        return fullName;
+    }
+    
     public int addOrderRecord(String sql, Object... values) {
         int generatedId = -1;
 
