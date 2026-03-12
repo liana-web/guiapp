@@ -49,6 +49,7 @@ public class Staffdashboard extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         products = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
+        products2 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -86,7 +87,7 @@ public class Staffdashboard extends javax.swing.JFrame {
         products.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         products.setForeground(new java.awt.Color(255, 255, 255));
         products.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        products.setText("ORDERS");
+        products.setText("PROFILE");
         products.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productsMouseClicked(evt);
@@ -98,7 +99,7 @@ public class Staffdashboard extends javax.swing.JFrame {
                 productsMouseExited(evt);
             }
         });
-        jPanel6.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 130, 50));
+        jPanel6.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 130, 50));
 
         products1.setBackground(new java.awt.Color(0, 153, 153));
         products1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -117,6 +118,24 @@ public class Staffdashboard extends javax.swing.JFrame {
             }
         });
         jPanel6.add(products1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 50));
+
+        products2.setBackground(new java.awt.Color(0, 153, 153));
+        products2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        products2.setForeground(new java.awt.Color(255, 255, 255));
+        products2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        products2.setText("ORDERS");
+        products2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                products2MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                products2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                products2MouseExited(evt);
+            }
+        });
+        jPanel6.add(products2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 130, 50));
 
         jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
 
@@ -225,7 +244,7 @@ public class Staffdashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_products1MouseClicked
 
     private void productsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productsMouseClicked
-        new orders().setVisible(true);
+        new staffprofile().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_productsMouseClicked
 
@@ -248,6 +267,19 @@ public class Staffdashboard extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void products2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products2MouseClicked
+        new orders().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_products2MouseClicked
+
+    private void products2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products2MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_products2MouseEntered
+
+    private void products2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_products2MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_products2MouseExited
 
     /**
      * @param args the command line arguments
@@ -305,5 +337,6 @@ public class Staffdashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel products;
     private javax.swing.JLabel products1;
+    private javax.swing.JLabel products2;
     // End of variables declaration//GEN-END:variables
 }

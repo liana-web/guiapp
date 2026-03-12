@@ -50,6 +50,7 @@ public class orders extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         products1 = new javax.swing.JLabel();
         sidebarmenu_myorders = new javax.swing.JLabel();
+        sidebarmenu_myorders1 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -109,8 +110,22 @@ public class orders extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 sidebarmenu_myordersMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myordersMouseEntered(evt);
+            }
         });
         jPanel6.add(sidebarmenu_myorders, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 150, 50));
+
+        sidebarmenu_myorders1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        sidebarmenu_myorders1.setForeground(new java.awt.Color(255, 255, 255));
+        sidebarmenu_myorders1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sidebarmenu_myorders1.setText("PROFILE");
+        sidebarmenu_myorders1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sidebarmenu_myorders1MouseClicked(evt);
+            }
+        });
+        jPanel6.add(sidebarmenu_myorders1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 150, 50));
 
         jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 590));
 
@@ -285,6 +300,15 @@ public class orders extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
+    private void sidebarmenu_myorders1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sidebarmenu_myorders1MouseClicked
+        new staffprofile().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_sidebarmenu_myorders1MouseClicked
+
+    private void sidebarmenu_myordersMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sidebarmenu_myordersMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sidebarmenu_myordersMouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -335,5 +359,6 @@ public class orders extends javax.swing.JFrame {
     private javax.swing.JTable ordersTable;
     private javax.swing.JLabel products1;
     private javax.swing.JLabel sidebarmenu_myorders;
+    private javax.swing.JLabel sidebarmenu_myorders1;
     // End of variables declaration//GEN-END:variables
 }
